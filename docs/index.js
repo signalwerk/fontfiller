@@ -103,8 +103,9 @@ function shCollectData(font) {
     } else {
         if (THIN_SPACE) {
             console.log("NARROW_NO_BREAK_SPACE set from Glyph 'THIN SPACE' (U+2009)")
-            let fallback = findGlyphByUni(font.glyphs.glyphs, 32)
-            width.NARROW_NO_BREAK_SPACE = THIN_SPACE.advanceWidth
+            let fallback = findGlyphByUni(font.glyphs.glyphs, 8201)
+            console.log("NARROW_NO_BREAK_SPACE --", fallback.advanceWidth)
+            width.NARROW_NO_BREAK_SPACE = fallback.advanceWidth
         } else {
             console.log("NARROW_NO_BREAK_SPACE set to 60% width of Glyph 'SPACE' (U+0020)")
             let fallback = findGlyphByUni(font.glyphs.glyphs, 32)
@@ -172,6 +173,24 @@ function shCollectData(font) {
 
     font.download();
 
-
-
 }
+
+
+
+opentype.load('./open-sans-v17-latin_latin-ext/open-sans-v17-latin_latin-ext-regular.woff', function(err, font) {
+    if (err) {
+        alert('Font could not be loaded: ' + err);
+    } else {
+        shCollectData(font)
+    }
+});
+
+
+
+opentype.load('./open-sans-v17-latin_latin-ext/open-sans-v17-latin_latin-ext-700.woff', function(err, font) {
+    if (err) {
+        alert('Font could not be loaded: ' + err);
+    } else {
+        shCollectData(font)
+    }
+});
