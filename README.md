@@ -2,7 +2,7 @@
 
 This is some random code for [opentype.js](https://opentype.js.org/) to generate "filler fonts". containing missing characters for correct typography based on a incomplete font.
 
-The generated font will just ontain the following characters:
+The generated font will just contain the following characters:
 
 
 ### FIGURE SPACE (U+2007)
