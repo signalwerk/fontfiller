@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import context from "../Store";
-import { codePoints } from "../util/parseInfo";
+import { codePoints, requiredChars } from "../util/parseInfo";
 
 function Header() {
   const [state] = useContext(context);
@@ -14,7 +14,7 @@ function Header() {
 
       <h3>Supported characters</h3>
       <ul>
-        {Object.keys(codePoints).map(key => (
+        {Object.keys(requiredChars).map(key => (
           <li>
             <small>U+{codePoints[key]}</small> {key}
           </li>
