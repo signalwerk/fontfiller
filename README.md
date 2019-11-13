@@ -1,5 +1,5 @@
 # font-filler (only stub)
-This is some random code for [opentype.js](https://opentype.js.org/) to generate "filler fonts" with missing characters of a Font.
+Generate missing whitespace characters for incomplete fonts.
 
 The generated font will just contain the following characters:
 * FIGURE SPACE (U+2007)
