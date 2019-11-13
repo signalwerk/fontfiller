@@ -1,0 +1,14 @@
+.FillSelect__list {
+  padding-left: 0;
+}
+
+ul > li::before {
+  content: none;
+}
+
+.FillSelect__item {
+  margin: 1rem 0;
+  padding: 1em;
+  background-color: var(--gray-color);
+  border-radius: 0.2em;
+}

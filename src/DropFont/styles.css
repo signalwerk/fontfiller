@@ -1,0 +1,7 @@
+.DropFont {
+  text-align: center;
+  padding: 2em;
+  /* cursor: pointer; */
+  border: 3px dashed var(--green-color);
+  border-radius: 0;
+}
