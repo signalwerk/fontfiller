@@ -1,32 +1,9 @@
 export const initialState = {
   file: null,
+  fontBase64: null,
   info: null,
   error: null
 };
-
-// export const initialState = {
-//   file: null,
-//   info: {
-//   "unitsPerEm": 2048,
-//   "fontSubfamily": "Bold",
-//   "os2": {
-//     "sTypoAscender": 1567,
-//     "sTypoDescender": -492,
-//     "sTypoLineGap": 132,
-//     "sxHeight": 1118,
-//     "sCapHeight": 1462
-//   },
-//   "width": {
-//     "NO-BREAK SPACE": 532,
-//     "THIN SPACE": 410,
-//     "NARROW NO-BREAK SPACE": null,
-//     "FIGURE SPACE": null,
-//     "DIGIT ZERO": 1169,
-//     "SPACE": 532
-//   }
-// },
-//   error: null
-// };
 
 export const reducer = (state, action) => {
   switch (action.type) {
@@ -43,6 +20,13 @@ export const reducer = (state, action) => {
         ...state,
         file: action.payload.file,
         info: action.payload.info,
+        error: null
+      };
+
+    case "LOAD_BASE_64":
+      return {
+        ...state,
+        fontBase64: action.payload.fontBase64,
         error: null
       };
     default:

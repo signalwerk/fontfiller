@@ -7,35 +7,27 @@ function Header() {
 
   return (
     <header className="Header">
+      <hr />
       <h1>FontFiller</h1>
-      <small>
-        Generate missing whitespace characters for incomplete fonts.
-      </small>
+      <hr />
+      <p>
+        Inspect fonts and generate missing whitespace characters
+        for&nbsp;incomplete&nbsp;fonts.
+      </p>
 
-      <h3>Supported characters</h3>
-      <ul>
-        {Object.keys(requiredChars).map(key => (
-          <li>
-            <small>U+{codePoints[key]}</small> {key}
-          </li>
-        ))}
-      </ul>
-      {state.error && (
-        <h2>
-          <span role="img" aria-label="Warning">
-            ⚠️
-          </span>{" "}
-          {state.error}
-        </h2>
-      )}
-
-      {state.info && (
-        <details>
-          <summary>Debug-Infos</summary>
-          <pre>{JSON.stringify(state.info, null, 2)}</pre>
-        </details>
-      )}
-      <br />
+      <p className="small">
+        Code by Stefan Huber ·{" "}
+        <a
+          className="App-link"
+          href="https://github.com/signalwerk/font-filler/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {" "}
+          OpenSource on GitHub
+        </a>
+      </p>
+      <hr />
     </header>
   );
 }

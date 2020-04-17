@@ -1,16 +1,48 @@
 // import { Glyph, Path, Font } from "opentype.js";
-import { Glyph, Path, Font } from "opentype.js/src/opentype.js";
+import opentype from "opentype.js";
 
 export const codePoints = {
+  "ZERO WIDTH SPACE": "200B",
+  SPACE: "0020",
   "NO-BREAK SPACE": "00A0",
   "THIN SPACE": "2009",
   "NARROW NO-BREAK SPACE": "202F",
+  "HAIR SPACE": "200A",
+  "SIX-PER-EM SPACE": "2006",
+  "FOUR-PER-EM SPACE": "2005",
+  "THREE-PER-EM SPACE": "2004",
+  "EN SPACE": "2002",
+  "EM SPACE": "2003",
   "FIGURE SPACE": "2007",
-  "DIGIT ZERO": "0030",
-  SPACE: "0020"
+  "PUNCTUATION SPACE": "2008",
+  "FULL STOP": "002E"
+};
+
+export const examples = {
+  "ZERO WIDTH SPACE":
+    "🟢 This|Is|A|Very|Long|Test|Word|This|Is|A|Very|Long|Test|Word|This|Is|A|Very|Long|Test|Word|This|Is|A|Very|Long|Test|Word|This|Is|A|Very|Long|Test|Word|This|Is|A|Very|Long|Test|Word|This|Is|A|Very|Long|Test|Word",
+  SPACE: "HHH|HHH¶nnn|nnn",
+  "NO-BREAK SPACE":
+    "🔴 HHHHHHHHHHHHHHHHHHHHHHHHHHHH|HHHHHHHHHHHHHHHHHHHHHHHHHHHH¶🟢 HHHHHHHHHHHHHHHHHHHHHHHHHHHH#HHHHHHHHHHHHHHHHHHHHHHHHHHHH",
+  "THIN SPACE": "🔴 800|km¶🟢 800#km",
+  "NARROW NO-BREAK SPACE": "🔴 800|km¶🟢 800#km",
+  "HAIR SPACE": "🔴 800|000|000¶🟢 800#000#000",
+  "SIX-PER-EM SPACE": "🔴 →|←¶🟢 →#←",
+  "FOUR-PER-EM SPACE": "🔴 →|←¶🟢 →#←",
+  "THREE-PER-EM SPACE": "🔴 →|←¶🟢 →#←",
+  "EN SPACE": "🔴 →|←¶🟢 →#←",
+  "EM SPACE": "🔴 →|←¶🟢 →#←",
+  "FIGURE SPACE": "🔴 00|00¶🟢 00#00",
+  "PUNCTUATION SPACE": "🔴 00|00¶🟢 00#00"
 };
 
 export const requiredChars = {
+  SPACE: {
+    fallback: false
+  },
+  "ZERO WIDTH SPACE": {
+    fallback: [{ char: "SPACE", factor: 0 }]
+  },
   "NO-BREAK SPACE": {
     fallback: [{ char: "SPACE" }]
   },
@@ -20,41 +52,46 @@ export const requiredChars = {
   "NARROW NO-BREAK SPACE": {
     fallback: [{ char: "THIN SPACE" }, { char: "SPACE", factor: 0.7 }]
   },
+  "HAIR SPACE": {
+    fallback: [{ char: "SPACE", factor: 0.3 }]
+  },
+  "SIX-PER-EM SPACE": {
+    fallback: [{ char: "EM SPACE", factor: 1 / 6 }]
+  },
+  "FOUR-PER-EM SPACE": {
+    fallback: [{ char: "EM SPACE", factor: 1 / 4 }]
+  },
+  "THREE-PER-EM SPACE": {
+    fallback: [{ char: "EM SPACE", factor: 1 / 3 }]
+  },
+  "EN SPACE": {
+    fallback: [{ char: "EM SPACE", factor: 1 / 2 }]
+  },
+  "EM SPACE": {
+    fallback: false
+  },
   "FIGURE SPACE": {
-    fallback: [{ char: "DIGIT ZERO" }]
+    fallback: [{ char: "DIGIT ZERO", factor: 1 }]
+  },
+  "PUNCTUATION SPACE": {
+    fallback: [{ char: "FULL STOP", factor: 1 }]
   }
 };
 
-export const findWidth = (fallback, widths) => {
+export const findFallbackWidth = (key, glyphs) => {
+  const fallback = requiredChars[key].fallback;
+
   for (var i = 0; i < fallback.length; i++) {
-    let fallbackWidth = widths[fallback[i].char];
-    if (fallbackWidth) {
+    const fallbackChar = glyphs[fallback[i].char];
+    if (fallbackChar && fallbackChar.exists) {
       return {
         char: fallback[i].char,
-        width: fallbackWidth,
-        factor: fallback[i].factor || 1
+        width: fallbackChar.width,
+        factor: fallback[i].factor
       };
     }
   }
-  return {};
-};
-
-export const requiredFillers = widths => {
-  return Object.keys(requiredChars).map(key => {
-    let exists = false;
-    let fallback = {};
-    if (widths[key]) {
-      exists = true;
-    } else {
-      fallback = findWidth(requiredChars[key].fallback, widths);
-    }
-    return {
-      name: key,
-      hex: codePoints[key],
-      exists,
-      fallback
-    };
-  });
+  return false;
 };
 
 const findByUnicode = (glyph, uni) => {
@@ -71,39 +108,41 @@ const findGlyphByUni = (glyphs, uni) => {
   return null;
 };
 
-const findGlyphWidthByUni = (glyphs, uni) => {
-  let glyph = findGlyphByUni(glyphs, uni);
-  if (glyph) {
-    return glyph.advanceWidth;
-  }
-  return null;
-};
-
-export const writeFont = (info, fallback) => {
-  console.log({ info, fallback });
+export const writeFont = info => {
   let glyphs = [];
   // The notdefGlyph always needs to be included.
   glyphs.push(
-    new Glyph({
+    new opentype.Glyph({
       name: ".notdef",
       advanceWidth: 650,
-      path: new Path()
+      path: new opentype.Path()
     })
   );
 
-  fallback.forEach(item => {
-    glyphs.push(
-      new Glyph({
-        name: `uni${item.hex}`,
-        unicode: parseInt(item.hex, 16),
-        advanceWidth: item.fallback.width * item.fallback.factor,
-        path: new Path()
-      })
-    );
+  Object.keys(info.glyphs).forEach(key => {
+    const glyph = info.glyphs[key];
+
+    if (glyph.exists === false && glyph.fallback) {
+      const dec = parseInt(codePoints[key], 16);
+      const width = Math.round(glyph.fallback.width * glyph.fallback.factor);
+
+      let g = new opentype.Glyph({
+        name: `uni${codePoints[key]}`,
+        unicode: dec,
+        advanceWidth: width,
+        path: new opentype.Path()
+      });
+
+      // fix bug
+      // see https://github.com/opentypejs/opentype.js/pull/430
+      g.advanceWidth = width;
+
+      glyphs.push(g);
+    }
   });
 
   // Create the font using measurements + glyphs defined above.
-  var font = new Font({
+  var font = new opentype.Font({
     familyName: "FontFiller",
     styleName: info.fontSubfamily,
     unitsPerEm: info.unitsPerEm,
@@ -119,28 +158,6 @@ export const writeFont = (info, fallback) => {
     sCapHeight: info.os2.sCapHeight
   };
 
-  // var test = new Font({
-  //   familyName: "TestFont",
-  //   styleName: "Bold",
-  //   unitsPerEm: 2048,
-  //   ascender: 1500,
-  //   descender: -500,
-  //   glyphs: [
-  //     new Glyph({
-  //       name: ".notdef",
-  //       advanceWidth: 650,
-  //       path: new Path()
-  //     })
-  //   ]
-  // });
-  //
-  // test.tables.os2 = {
-  //   ...test.tables.os2,
-  //   sxHeight: 1100,
-  //   sCapHeight: 1400
-  // };
-  // test.download();
-
   font.download();
 };
 
@@ -155,14 +172,7 @@ export const parseInfo = font => {
       sxHeight: null,
       sCapHeight: null
     },
-    width: {
-      FIGURE_SPACE: null,
-      NO_BREAK_SPACE: null,
-      THIN_SPACE: null,
-      NARROW_NO_BREAK_SPACE: null,
-      ZERO: null,
-      SPACE: null
-    }
+    glyphs: null
   };
 
   if (font.tables.head) {
@@ -184,14 +194,25 @@ export const parseInfo = font => {
     conf.os2.sCapHeight = table.sCapHeight;
   }
 
-  conf.width = {};
-  Object.keys(codePoints).forEach(
-    key =>
-      (conf.width[key] = findGlyphWidthByUni(
-        font.glyphs.glyphs,
-        parseInt(codePoints[key], 16)
-      ))
-  );
+  conf.glyphs = {};
+  Object.keys(codePoints).forEach(key => {
+    const hex = codePoints[key];
+    conf.glyphs[key] = {};
+
+    let glyph = findGlyphByUni(font.glyphs.glyphs, parseInt(hex, 16));
+
+    conf.glyphs[key].exists = !!glyph;
+
+    if (glyph) {
+      conf.glyphs[key].width = glyph.advanceWidth;
+    }
+  });
+
+  Object.keys(conf.glyphs).forEach(key => {
+    if (!conf.glyphs[key].exists) {
+      conf.glyphs[key].fallback = findFallbackWidth(key, conf.glyphs);
+    }
+  });
 
   return conf;
 };

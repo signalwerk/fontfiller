@@ -1,16 +1,17 @@
 import React, { useContext, useCallback, Fragment } from "react";
-import { parse } from "opentype.js";
+import opentype from "opentype.js";
 
 import { useDropzone } from "react-dropzone";
 import context from "../Store";
 import { parseInfo } from "../util/parseInfo";
+import { base64ArrayBuffer } from "./base64";
 
 import "./styles.css";
 
 // import opentypejs from 'opentype.js';
 
 function DropFont() {
-  const [, dispatch] = useContext(context);
+  const [state, dispatch] = useContext(context);
 
   const onDrop = useCallback(
     acceptedFiles => {
@@ -37,7 +38,7 @@ function DropFont() {
         const binaryStr = reader.result;
 
         try {
-          let font = parse(binaryStr);
+          let font = opentype.parse(binaryStr);
 
           dispatch({
             type: "LOAD",
@@ -46,6 +47,21 @@ function DropFont() {
               info: parseInfo(font)
             }
           });
+
+          // const readerBase64 = new FileReader();
+
+          // readerBase64.onloadend = function() {
+          // var base64 = this.result;
+
+          dispatch({
+            type: "LOAD_BASE_64",
+            payload: {
+              fontBase64: base64ArrayBuffer(binaryStr)
+            }
+          });
+          // };
+
+          // readerBase64.readAsDataURL(binaryStr);
         } catch (err) {
           dispatch({
             type: "ERROR",
@@ -75,6 +91,16 @@ function DropFont() {
   return (
     <Fragment>
       <div className="DropFont" {...getRootProps()}>
+        {state.fontBase64 && (
+          <style type="text/css">
+            {`@font-face {
+                font-family: "my-loaded-font";
+                font-weight: normal;
+                src: url("data:font/opentype;base64,${state.fontBase64}");
+            }`}
+          </style>
+        )}
+
         <input {...getInputProps()} />
         {isDragActive ? (
           <span className="DropFont__caption">Drop the file here ...</span>
@@ -86,6 +112,16 @@ function DropFont() {
 
         <br />
         <small>Support for WOFF, OTF, TTF</small>
+        <br />
+
+        {state.error && (
+          <h2>
+            <span role="img" aria-label="Warning">
+              ⚠️
+            </span>{" "}
+            {state.error}
+          </h2>
+        )}
       </div>
     </Fragment>
   );
