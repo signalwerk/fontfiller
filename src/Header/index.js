@@ -19,7 +19,7 @@ function Header() {
         Code by Stefan Huber ·{" "}
         <a
           className="App-link"
-          href="https://github.com/signalwerk/font-filler/"
+          href="https://github.com/signalwerk/fontfiller/"
           target="_blank"
           rel="noopener noreferrer"
         >
