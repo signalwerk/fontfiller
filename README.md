@@ -1,4 +1,7 @@
+[![Build Status](https://travis-ci.org/signalwerk/fontfiller.svg?branch=master)](https://travis-ci.org/signalwerk/fontfiller)
+
 # fontfiller
+
 Generate missing whitespace characters for incomplete fonts.
 
 
