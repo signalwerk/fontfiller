@@ -1,10 +1,6 @@
-import React, { useContext } from "react";
-import context from "../Store";
-import { codePoints, requiredChars } from "../util/parseInfo";
+import React from "react";
 
 function Header() {
-  const [state] = useContext(context);
-
   return (
     <header className="Header">
       <hr />

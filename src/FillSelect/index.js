@@ -1,6 +1,6 @@
 import React, { useContext, Fragment } from "react";
 import context from "../Store";
-import { requiredFillers, codePoints, examples } from "../util/parseInfo";
+import { codePoints, examples } from "../util/parseInfo";
 import "./styles.css";
 
 function FillSelect() {
@@ -9,8 +9,6 @@ function FillSelect() {
   if (!state.info) {
     return null;
   }
-
-  // let generate = requiredFillers(state.info.width);
 
   return (
     <div className="FillSelect">
