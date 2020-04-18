@@ -15,6 +15,7 @@ export const codePoints = {
   "EM SPACE": "2003",
   "FIGURE SPACE": "2007",
   "PUNCTUATION SPACE": "2008",
+  "DIGIT ZERO": "0030",
   "FULL STOP": "002E"
 };
 
