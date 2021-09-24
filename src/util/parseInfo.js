@@ -45,13 +45,13 @@ export const requiredChars = {
     fallback: [{ char: "SPACE", factor: 0 }]
   },
   "NO-BREAK SPACE": {
-    fallback: [{ char: "SPACE" }]
+    fallback: [{ char: "SPACE" , factor: 1 }]
   },
   "THIN SPACE": {
     fallback: [{ char: "SPACE", factor: 0.7 }]
   },
   "NARROW NO-BREAK SPACE": {
-    fallback: [{ char: "THIN SPACE" }, { char: "SPACE", factor: 0.7 }]
+    fallback: [{ char: "THIN SPACE", factor: 1 }, { char: "SPACE", factor: 0.7 }]
   },
   "HAIR SPACE": {
     fallback: [{ char: "SPACE", factor: 0.3 }]
