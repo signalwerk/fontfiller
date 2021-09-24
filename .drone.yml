@@ -14,4 +14,4 @@ steps:
       DEPLOY_DIR: "build"
     when:
       branch:
-        - master
+        - main

@@ -1,4 +1,4 @@
-[![Build Status](https://ci.signalwerk.ch/api/badges/signalwerk/fontfiller/status.svg)](https://ci.signalwerk.ch/signalwerk/fontfiller)
+[![Build Status](https://ci.signalwerk.ch/api/badges/signalwerk/fontfiller/status.svg?ref=refs/heads/main)](https://ci.signalwerk.ch/signalwerk/fontfiller)
 
 # fontfiller
 
