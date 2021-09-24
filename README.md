@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/signalwerk/fontfiller.svg?branch=master)](https://travis-ci.org/signalwerk/fontfiller)
+[![Build Status](https://ci.signalwerk.ch/api/badges/signalwerk/fontfiller/status.svg)](https://ci.signalwerk.ch/signalwerk/fontfiller)
 
 # fontfiller
 

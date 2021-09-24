@@ -4,7 +4,7 @@ set -e # Exit with nonzero exit code if anything fails
 
 echo "-- start"
 
-SOURCE_BRANCH="${SOURCE_BRANCH:-master}"
+SOURCE_BRANCH="${SOURCE_BRANCH:-main}"
 TARGET_BRANCH="${TARGET_BRANCH:-gh-pages}"
 DEPLOY_DIR="${DEPLOY_DIR:-public}"
 
