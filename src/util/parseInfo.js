@@ -16,7 +16,7 @@ export const codePoints = {
   "FIGURE SPACE": "2007",
   "PUNCTUATION SPACE": "2008",
   "DIGIT ZERO": "0030",
-  "FULL STOP": "002E"
+  "FULL STOP": "002E",
 };
 
 export const examples = {
@@ -34,49 +34,52 @@ export const examples = {
   "EN SPACE": "🔴 →|←¶🟢 →#←",
   "EM SPACE": "🔴 →|←¶🟢 →#←",
   "FIGURE SPACE": "🔴 00|00¶🟢 00#00",
-  "PUNCTUATION SPACE": "🔴 00|00¶🟢 00#00"
+  "PUNCTUATION SPACE": "🔴 00|00¶🟢 00#00",
 };
 
 export const requiredChars = {
   SPACE: {
-    fallback: false
+    fallback: false,
   },
   "ZERO WIDTH SPACE": {
-    fallback: [{ char: "SPACE", factor: 0 }]
+    fallback: [{ char: "SPACE", factor: 0 }],
   },
   "NO-BREAK SPACE": {
-    fallback: [{ char: "SPACE" , factor: 1 }]
+    fallback: [{ char: "SPACE", factor: 1 }],
   },
   "THIN SPACE": {
-    fallback: [{ char: "SPACE", factor: 0.7 }]
+    fallback: [{ char: "SPACE", factor: 0.7 }],
   },
   "NARROW NO-BREAK SPACE": {
-    fallback: [{ char: "THIN SPACE", factor: 1 }, { char: "SPACE", factor: 0.7 }]
+    fallback: [
+      { char: "THIN SPACE", factor: 1 },
+      { char: "SPACE", factor: 0.7 },
+    ],
   },
   "HAIR SPACE": {
-    fallback: [{ char: "SPACE", factor: 0.3 }]
+    fallback: [{ char: "SPACE", factor: 0.3 }],
   },
   "SIX-PER-EM SPACE": {
-    fallback: [{ char: "EM SPACE", factor: 1 / 6 }]
+    fallback: [{ char: "EM SPACE", factor: 1 / 6 }],
   },
   "FOUR-PER-EM SPACE": {
-    fallback: [{ char: "EM SPACE", factor: 1 / 4 }]
+    fallback: [{ char: "EM SPACE", factor: 1 / 4 }],
   },
   "THREE-PER-EM SPACE": {
-    fallback: [{ char: "EM SPACE", factor: 1 / 3 }]
+    fallback: [{ char: "EM SPACE", factor: 1 / 3 }],
   },
   "EN SPACE": {
-    fallback: [{ char: "EM SPACE", factor: 1 / 2 }]
+    fallback: [{ char: "EM SPACE", factor: 1 / 2 }],
   },
   "EM SPACE": {
-    fallback: false
+    fallback: false,
   },
   "FIGURE SPACE": {
-    fallback: [{ char: "DIGIT ZERO", factor: 1 }]
+    fallback: [{ char: "DIGIT ZERO", factor: 1 }],
   },
   "PUNCTUATION SPACE": {
-    fallback: [{ char: "FULL STOP", factor: 1 }]
-  }
+    fallback: [{ char: "FULL STOP", factor: 1 }],
+  },
 };
 
 export const findFallbackWidth = (key, glyphs) => {
@@ -88,7 +91,7 @@ export const findFallbackWidth = (key, glyphs) => {
       return {
         char: fallback[i].char,
         width: fallbackChar.width,
-        factor: fallback[i].factor
+        factor: fallback[i].factor,
       };
     }
   }
@@ -100,7 +103,7 @@ const findByUnicode = (glyph, uni) => {
 };
 
 const findGlyphByUni = (glyphs, uni) => {
-  let key = Object.keys(glyphs).find(key => findByUnicode(glyphs[key], uni));
+  let key = Object.keys(glyphs).find((key) => findByUnicode(glyphs[key], uni));
 
   if (key) {
     return glyphs[key];
@@ -109,18 +112,18 @@ const findGlyphByUni = (glyphs, uni) => {
   return null;
 };
 
-export const writeFont = info => {
+export const writeFont = (info) => {
   let glyphs = [];
   // The notdefGlyph always needs to be included.
   glyphs.push(
     new opentype.Glyph({
       name: ".notdef",
       advanceWidth: 650,
-      path: new opentype.Path()
+      path: new opentype.Path(),
     })
   );
 
-  Object.keys(info.glyphs).forEach(key => {
+  Object.keys(info.glyphs).forEach((key) => {
     const glyph = info.glyphs[key];
 
     if (glyph.exists === false && glyph.fallback) {
@@ -131,7 +134,7 @@ export const writeFont = info => {
         name: `uni${codePoints[key]}`,
         unicode: dec,
         advanceWidth: width,
-        path: new opentype.Path()
+        path: new opentype.Path(),
       });
 
       // fix bug
@@ -149,20 +152,20 @@ export const writeFont = info => {
     unitsPerEm: info.unitsPerEm,
     ascender: info.os2.sTypoAscender,
     descender: info.os2.sTypoDescender,
-    glyphs: glyphs
+    glyphs: glyphs,
   });
 
   font.tables.os2 = {
     ...font.tables.os2,
     sTypoLineGap: info.os2.sTypoLineGap,
     sxHeight: info.os2.sxHeight,
-    sCapHeight: info.os2.sCapHeight
+    sCapHeight: info.os2.sCapHeight,
   };
 
   font.download();
 };
 
-export const parseInfo = font => {
+export const parseInfo = (font) => {
   let conf = {
     unitsPerEm: null,
     fontSubfamily: null,
@@ -171,9 +174,9 @@ export const parseInfo = font => {
       sTypoDescender: null,
       sTypoLineGap: null,
       sxHeight: null,
-      sCapHeight: null
+      sCapHeight: null,
     },
-    glyphs: null
+    glyphs: null,
   };
 
   if (font.tables.head) {
@@ -196,7 +199,7 @@ export const parseInfo = font => {
   }
 
   conf.glyphs = {};
-  Object.keys(codePoints).forEach(key => {
+  Object.keys(codePoints).forEach((key) => {
     const hex = codePoints[key];
     conf.glyphs[key] = {};
 
@@ -209,7 +212,7 @@ export const parseInfo = font => {
     }
   });
 
-  Object.keys(conf.glyphs).forEach(key => {
+  Object.keys(conf.glyphs).forEach((key) => {
     if (!conf.glyphs[key].exists) {
       conf.glyphs[key].fallback = findFallbackWidth(key, conf.glyphs);
     }

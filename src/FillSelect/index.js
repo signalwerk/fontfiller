@@ -16,12 +16,12 @@ function FillSelect() {
 
       <ul className="FillSelect__list">
         {Object.keys(state.info.glyphs).map(
-          key =>
+          (key) =>
             state.info.glyphs &&
             state.info.glyphs[key].exists === false &&
             state.info.glyphs[key].fallback && (
               <li className="FillSelect__item FillSelect__item--missing">
-                {examples[key].split("¶").map(line => (
+                {examples[key].split("¶").map((line) => (
                   <h3 className="FillSelect__example">
                     {line
 
@@ -36,9 +36,11 @@ function FillSelect() {
                             <span
                               className="FillSelect__spaceMock"
                               style={{
-                                width: `${(1 / state.info.unitsPerEm) *
+                                width: `${
+                                  (1 / state.info.unitsPerEm) *
                                   (state.info.glyphs[key].fallback.width *
-                                    state.info.glyphs[key].fallback.factor)}em`
+                                    state.info.glyphs[key].fallback.factor)
+                                }em`,
                               }}
                             ></span>
                           )}

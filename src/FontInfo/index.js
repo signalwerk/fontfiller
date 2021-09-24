@@ -18,7 +18,7 @@ function FontInfo() {
           </tr>
         </thead>
         <tbody>
-          {Object.keys(requiredChars).map(key => (
+          {Object.keys(requiredChars).map((key) => (
             <tr key={key}>
               <td>
                 <small>U+{codePoints[key]}</small> {key}
@@ -70,12 +70,12 @@ function FontInfo() {
         url("./fontfiller.woff") format("woff");
     unicode-range: ${Object.keys(state.info.glyphs)
       .filter(
-        key =>
+        (key) =>
           state.info.glyphs &&
           state.info.glyphs[key].exists === false &&
           state.info.glyphs[key].fallback
       )
-      .map(key => "U+" + codePoints[key])
+      .map((key) => "U+" + codePoints[key])
       .join(", ")};
 }`}
           </pre>

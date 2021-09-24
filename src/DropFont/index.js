@@ -14,23 +14,23 @@ function DropFont() {
   const [state, dispatch] = useContext(context);
 
   const onDrop = useCallback(
-    acceptedFiles => {
+    (acceptedFiles) => {
       const reader = new FileReader();
 
       reader.onabort = () =>
         dispatch({
           type: "ERROR",
           payload: {
-            error: "file reading was aborted"
-          }
+            error: "file reading was aborted",
+          },
         });
 
       reader.onerror = () =>
         dispatch({
           type: "ERROR",
           payload: {
-            error: "file reading has failed"
-          }
+            error: "file reading has failed",
+          },
         });
       reader.onload = () => {
         // Do whatever you want with the file contents
@@ -44,8 +44,8 @@ function DropFont() {
             type: "LOAD",
             payload: {
               file: font,
-              info: parseInfo(font)
-            }
+              info: parseInfo(font),
+            },
           });
 
           // const readerBase64 = new FileReader();
@@ -56,8 +56,8 @@ function DropFont() {
           dispatch({
             type: "LOAD_BASE_64",
             payload: {
-              fontBase64: base64ArrayBuffer(binaryStr)
-            }
+              fontBase64: base64ArrayBuffer(binaryStr),
+            },
           });
           // };
 
@@ -66,20 +66,20 @@ function DropFont() {
           dispatch({
             type: "ERROR",
             payload: {
-              error: err.message
-            }
+              error: err.message,
+            },
           });
         }
       };
 
       if (acceptedFiles.length === 1) {
-        acceptedFiles.forEach(file => reader.readAsArrayBuffer(file));
+        acceptedFiles.forEach((file) => reader.readAsArrayBuffer(file));
       } else {
         dispatch({
           type: "ERROR",
           payload: {
-            error: "please select only one file"
-          }
+            error: "please select only one file",
+          },
         });
       }
     },
