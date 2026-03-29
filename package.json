@@ -7,7 +7,7 @@
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-dropzone": "^10.1.10",
-    "react-scripts": "3.2.0"
+    "react-scripts": "5.0.1"
   },
   "scripts": {
     "start": "REACT_APP_BUILD_TIME=$(date +%s) react-scripts start",
